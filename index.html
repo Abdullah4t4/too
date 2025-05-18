@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlyOver - Online Image & PDF Tools</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --warning: #f72585;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            font-size: 28px;
+            color: var(--primary);
+            margin-right: 10px;
+        }
+        
+        .logo-text {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            background: linear-gradient(to right, var(--primary), var(--warning));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .mobile-menu {
+            display: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
+            text-align: center;
+            background: linear-gradient(135deg, #f5f7ff 0%, #e8ecff 100%);
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 40px;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+        }
+        
+        /* Tools Section */
+        .tools-section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+            font-size: 2rem;
+            color: var(--dark);
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--warning));
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .tool-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tool-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .tool-card h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .tool-card p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .tool-link {
+            display: inline-block;
+            padding: 8px 20px;
+            background-color: var(--light);
+            color: var(--primary);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .tool-link:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 60px 0;
+            background-color: white;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature-card {
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .feature-icon {
+            font-size: 24px;
+            color: var(--primary);
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        
+        .feature-content h3 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+        
+        .feature-content p {
+            color: #666;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero {
+                padding: 60px 0;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <i class="fas fa-paper-plane logo-icon"></i>
+                    <span class="logo-text">FlyOver</span>
+                </a>
+                <ul class="nav-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Image Tools</a></li>
+                    <li><a href="#">PDF Tools</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+                <div class="mobile-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>All Your Image & PDF Tools in One Place</h1>
+            <p>FlyOver provides free online tools to convert, compress, edit, and manage your images and PDF files with ease. No installation required.</p>
+            <a href="#" class="cta-button">Get Started for Free</a>
+        </div>
+    </section>
+
+    <!-- Image Tools Section -->
+    <section class="tools-section">
+        <div class="container">
+            <h2 class="section-title">Image Tools</h2>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <i class="fas fa-compress-alt tool-icon"></i>
+                    <h3>Compress Image</h3>
+                    <p>Reduce image file size without losing quality</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-exchange-alt tool-icon"></i>
+                    <h3>Convert Image</h3>
+                    <p>Convert between JPG, PNG, GIF, WEBP and more</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-crop tool-icon"></i>
+                    <h3>Crop Image</h3>
+                    <p>Crop your images to any size or aspect ratio</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-expand tool-icon"></i>
+                    <h3>Resize Image</h3>
+                    <p>Change image dimensions while maintaining quality</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-magic tool-icon"></i>
+                    <h3>Image Editor</h3>
+                    <p>Edit photos online with filters and adjustments</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-file-pdf tool-icon"></i>
+                    <h3>Image to PDF</h3>
+                    <p>Convert multiple images to a single PDF document</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PDF Tools Section -->
+    <section class="tools-section">
+        <div class="container">
+            <h2 class="section-title">PDF Tools</h2>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <i class="fas fa-file-word tool-icon"></i>
+                    <h3>PDF to Word</h3>
+                    <p>Convert PDF files to editable Word documents</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-file-pdf tool-icon"></i>
+                    <h3>Word to PDF</h3>
+                    <p>Convert Word documents to PDF files</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-file-excel tool-icon"></i>
+                    <h3>PDF to Excel</h3>
+                    <p>Extract tables from PDF to Excel spreadsheets</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-file-powerpoint tool-icon"></i>
+                    <h3>PDF to PPT</h3>
+                    <p>Convert PDF files to PowerPoint presentations</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-object-group tool-icon"></i>
+                    <h3>Merge PDF</h3>
+                    <p>Combine multiple PDF files into one document</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-cut tool-icon"></i>
+                    <h3>Split PDF</h3>
+                    <p>Divide a PDF into multiple separate files</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-lock tool-icon"></i>
+                    <h3>Protect PDF</h3>
+                    <p>Add passwords and permissions to your PDF</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-lock-open tool-icon"></i>
+                    <h3>Unlock PDF</h3>
+                    <p>Remove password protection from PDF files</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-compress-arrows-alt tool-icon"></i>
+                    <h3>Compress PDF</h3>
+                    <p>Reduce PDF file size while keeping quality</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-edit tool-icon"></i>
+                    <h3>Edit PDF</h3>
+                    <p>Modify text, images and pages in your PDF</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-image tool-icon"></i>
+                    <h3>PDF to JPG</h3>
+                    <p>Convert PDF pages to high-quality JPG images</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+                <div class="tool-card">
+                    <i class="fas fa-sort-numeric-up tool-icon"></i>
+                    <h3>Number PDF</h3>
+                    <p>Add page numbers to your PDF documents</p>
+                    <a href="#" class="tool-link">Use Tool</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose FlyOver?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt feature-icon"></i>
+                    <div class="feature-content">
+                        <h3>Secure Processing</h3>
+                        <p>Your files are processed securely in your browser and never stored on our servers.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-bolt feature-icon"></i>
+                    <div class="feature-content">
+                        <h3>Fast Processing</h3>
+                        <p>Our tools work quickly to process your files without compromising quality.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-dollar-sign feature-icon"></i>
+                    <div class="feature-content">
+                        <h3>100% Free</h3>
+                        <p>All our tools are completely free with no hidden charges or watermarks.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-desktop feature-icon"></i>
+                    <div class="feature-content">
+                        <h3>No Installation</h3>
+                        <p>Works directly in your browser - no software installation required.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-cloud feature-icon"></i>
+                    <div class="feature-content">
+                        <h3>Cloud Integration</h3>
+                        <p>Import files directly from Google Drive, Dropbox, and other cloud services.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-mobile-alt feature-icon"></i>
+                    <div class="feature-content">
+                        <h3>Mobile Friendly</h3>
+                        <p>Works perfectly on all devices including smartphones and tablets.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>FlyOver</h3>
+                    <p>Your complete online solution for image and PDF tools. Fast, secure, and completely free.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Image Tools</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Compress Image</a></li>
+                        <li><a href="#">Convert Image</a></li>
+                        <li><a href="#">Crop Image</a></li>
+                        <li><a href="#">Resize Image</a></li>
+                        <li><a href="#">Image Editor</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>PDF Tools</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">PDF to Word</a></li>
+                        <li><a href="#">Word to PDF</a></li>
+                        <li><a href="#">Merge PDF</a></li>
+                        <li><a href="#">Split PDF</a></li>
+                        <li><a href="#">Compress PDF</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Blog</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 FlyOver. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
